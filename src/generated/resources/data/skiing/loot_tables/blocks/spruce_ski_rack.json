@@ -1,0 +1,46 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_name",
+              "source": "block_entity"
+            },
+            {
+              "function": "minecraft:copy_nbt",
+              "ops": [
+                {
+                  "op": "replace",
+                  "source": "inv",
+                  "target": "EntityTag.inv"
+                }
+              ],
+              "source": "block_entity"
+            },
+            {
+              "type": "skiing:ski_rack",
+              "entries": [
+                {
+                  "type": "minecraft:dynamic",
+                  "name": "minecraft:contents"
+                }
+              ],
+              "function": "minecraft:set_contents"
+            },
+            {
+              "function": "minecraft:explosion_decay"
+            }
+          ],
+          "name": "skiing:spruce_ski_rack"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "skiing:blocks/spruce_ski_rack"
+}

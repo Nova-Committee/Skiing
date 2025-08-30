@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "b": {
+      "item": "minecraft:crimson_planks"
+    },
+    "t": {
+      "item": "minecraft:crimson_stairs"
+    }
+  },
+  "pattern": [
+    "t  ",
+    " b ",
+    "  b"
+  ],
+  "result": {
+    "item": "skiing:ski",
+    "nbt": "{EntityTag:{skiing_material:\"minecraft:crimson_planks\"}}"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "b": {
+      "item": "minecraft:spruce_planks"
+    },
+    "t": {
+      "item": "minecraft:spruce_stairs"
+    }
+  },
+  "pattern": [
+    "t  ",
+    " b ",
+    "  b"
+  ],
+  "result": {
+    "item": "skiing:ski",
+    "nbt": "{EntityTag:{skiing_material:\"minecraft:spruce_planks\"}}"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "b": {
+      "item": "minecraft:crimson_planks"
+    },
+    "n": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    " b ",
+    " b ",
+    " n "
+  ],
+  "result": {
+    "count": 2,
+    "item": "skiing:crimson_ski_stick"
+  },
+  "show_notification": true
+}
