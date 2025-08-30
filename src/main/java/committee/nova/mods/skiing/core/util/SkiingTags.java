@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.Block;
 public class SkiingTags {
     public static class Blocks {
         public static final TagKey<Block> SNOWY_BLOCKS = modTag("snowy_blocks");
+        public static final TagKey<Block> SKIING_MATERIALS = modTag("skiing_materials");
 
         private static TagKey<Block> modTag(String name) {
             return TagKey.create(Registries.BLOCK, new ResourceLocation(Skiing.MOD_ID, name));

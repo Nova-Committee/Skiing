@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:item/handheld",
-  "textures": {
-    "layer0": "skiing:item/pullover",
-    "layer1": "skiing:item/pullover_overlay"
-  }
-}

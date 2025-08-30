@@ -80,17 +80,17 @@ public class SkiRackBlock extends HorizontalDirectionalBlock implements EntityBl
     }
 
 
-    @Override
-    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult blockHitResult) {
-        if (level.getBlockEntity(pos) instanceof SkiRackBlockEntity skiRackBlockEntity) {
-            ItemStack itemstack = player.getItemInHand(hand);
-            if (!level.isClientSide && skiRackBlockEntity.addItem(player.getAbilities().instabuild ? itemstack.copy() : itemstack)) {
-                player.awardStat(Stats.INTERACT_WITH_CAMPFIRE);
-                return InteractionResult.SUCCESS;
-            }
-        }
-        return InteractionResult.PASS;
-    }
+//    @Override
+//    public @NotNull InteractionResult use(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult blockHitResult) {
+//        if (level.getBlockEntity(pos) instanceof SkiRackBlockEntity skiRackBlockEntity) {
+//            ItemStack itemstack = player.getItemInHand(hand);
+//            if (!level.isClientSide && skiRackBlockEntity.addItem(player.getAbilities().instabuild ? itemstack.copy() : itemstack)) {
+//                player.awardStat(Stats.INTERACT_WITH_CAMPFIRE);
+//                return InteractionResult.SUCCESS;
+//            }
+//        }
+//        return InteractionResult.PASS;
+//    }
 
 
     @Override

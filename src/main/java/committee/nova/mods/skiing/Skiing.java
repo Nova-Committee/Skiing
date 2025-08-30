@@ -2,15 +2,12 @@ package committee.nova.mods.skiing;
 
 import com.mojang.logging.LogUtils;
 import committee.nova.mods.skiing.core.config.SkiingConfig;
+import committee.nova.mods.skiing.core.data.*;
 import committee.nova.mods.skiing.core.network.PacketHandler;
 import committee.nova.mods.skiing.core.registry.*;
 import committee.nova.mods.skiing.core.util.SkiingUtils;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.village.VillagerTradesEvent;
@@ -41,11 +38,11 @@ public class Skiing {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::gatherData);
 
-        SkiingEntities.ENTITIES.register(modEventBus);
         SkiingBlocks.BLOCKS.register(modEventBus);
-        SkiingItems.ITEMS.register(modEventBus);
-        SkiingTab.TABS.register(modEventBus);
         SkiingBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+        SkiingTab.TABS.register(modEventBus);
+        SkiingEntities.ENTITIES.register(modEventBus);
+        SkiingItems.ITEMS.register(modEventBus);
         SkiingPaintingVariants.PAINTINGS.register(modEventBus);
         SkiingVillagers.POINTS_OF_INTEREST.register(modEventBus);
         SkiingVillagers.PROFESSIONS.register(modEventBus);
@@ -68,8 +65,19 @@ public class Skiing {
 
     private void gatherData(GatherDataEvent event) {
         var generator = event.getGenerator();
+        var output = generator.getPackOutput();
         var existingFileHelper = event.getExistingFileHelper();
-        var isClientProvider = event.includeClient();
+        var future = event.getLookupProvider();
+
+        if (event.includeServer()) {
+            generator.addProvider(true, new BlockTagsGenerator(output, future, existingFileHelper));
+            generator.addProvider(true, new RecipeGenerator(output));
+            generator.addProvider(true, new LootTablesGenerator(output));
+        }
+        if (event.includeClient()) {
+            generator.addProvider(true, new LanguageGenerator(output, MOD_ID));
+            generator.addProvider(true, new ItemModelGenerator(output, MOD_ID, existingFileHelper));
+        }
 
     }
 

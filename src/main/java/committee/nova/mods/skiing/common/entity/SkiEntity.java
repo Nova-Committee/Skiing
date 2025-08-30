@@ -36,7 +36,7 @@ public class SkiEntity extends AbstractMultiTextureEntity {
     }
 
     @Override
-    public void positionRider(@NotNull Entity passenger, Entity.MoveFunction p_19958_) {
+    public void positionRider(@NotNull Entity passenger, Entity.MoveFunction moveFunction) {
         if (!this.hasPassenger(passenger)) return;
         Vec3 vec3 = (new Vec3(-0.25F, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float) Math.PI / 180F) - ((float) Math.PI / 2F));
         passenger.setPos(this.getX() + vec3.x, this.getY(), this.getZ() + vec3.z);

@@ -1,6 +1,0 @@
-{
-  "parent": "skiing:item/template_ski_stick",
-  "textures": {
-    "layer0": "minecraft:block/crimson_planks"
-  }
-}

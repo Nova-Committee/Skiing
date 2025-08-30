@@ -1,6 +1,7 @@
 package committee.nova.mods.skiing.core.registry;
 
 import committee.nova.mods.skiing.Skiing;
+import committee.nova.mods.skiing.core.util.SkiingTags;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -9,7 +10,10 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.Objects;
 
 /**
  * @Project: skiing
@@ -33,6 +37,13 @@ public class SkiingTab {
                     Painting.storeVariant(compoundtag, p_269979_.getHolder().orElseThrow());
                     output.accept(itemstack);
                 });
+//                Objects.requireNonNull(ForgeRegistries.BLOCKS.tags()).getTag(SkiingTags.Blocks.SKIING_MATERIALS).forEach(block -> {
+//                    ItemStack itemStack = new ItemStack(this);
+//                    CompoundTag compoundTag = new CompoundTag();
+//                    compoundTag.putString("skiing_material", Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)).toString());
+//                    itemStack.addTagElement("EntityTag", compoundTag);
+//                    output.accept(itemStack);
+//                });
             })
             .build());
 }

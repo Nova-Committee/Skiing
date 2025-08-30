@@ -5,6 +5,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 public class SkiingConfig {
     public static class SkiingCommonConfig {
         public static ForgeConfigSpec.DoubleValue MIN_REQUIRED_VELOCITY_FOR_ROTATION;
+        public static ForgeConfigSpec.BooleanValue SPEED_DEBUG;
 
         public static ForgeConfigSpec.DoubleValue MAX_SKI_HEALTH;
         public static ForgeConfigSpec.DoubleValue MAX_SKI_VELOCITY;
@@ -31,6 +32,9 @@ public class SkiingConfig {
             MIN_REQUIRED_VELOCITY_FOR_ROTATION = builder
                     .comment("This sets the minimum required velocity you need to rotate your ski, sled or snowboard.")
                     .defineInRange("min_required_velocity_for_rotation", 0.02D, 0D, 0.1D);
+            SPEED_DEBUG = builder
+                    .comment("Debug mode for AbstractControllableEntity.")
+                    .define("speed_debug", false);
             builder.pop();
     
             builder.push("ski");

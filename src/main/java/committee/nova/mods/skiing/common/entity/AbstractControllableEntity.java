@@ -8,6 +8,7 @@ import committee.nova.mods.skiing.core.util.SkiingTags;
 import net.minecraft.BlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -60,10 +61,6 @@ public abstract class AbstractControllableEntity extends Entity {
         this.setPos(0.0D, 0.1D, 0.0D);
     }
 
-    private static boolean canVehicleCollide(Entity ridingEntity, Entity entity) {
-        return (entity.canBeCollidedWith() || entity.isPushable()) && !ridingEntity.isPassengerOfSameVehicle(entity);
-    }
-
     protected abstract float getMaxVelocity();
 
     protected abstract float getMaxReverseVelocity();
@@ -99,26 +96,26 @@ public abstract class AbstractControllableEntity extends Entity {
         this.resetInput();
 
         // default max speed is 72 km/h; without going downwards ~ 43km/h
-        //player.displayClientMessage(new TextComponent(this.getVelocity() * 20 * 3.6F + " km/h" + " / " + this.getVelocity()), true);
+        if (SkiingConfig.SkiingCommonConfig.SPEED_DEBUG.get()) displayClientMessage(this.getVelocity() * 20 * 3.6F + " km/h" + " / " + this.getVelocity());
     }
 
-/*    private void displayClientMessage(String text) {
+    private void displayClientMessage(String text) {
         if (this.getControllingPassenger() instanceof Player player) {
-            player.displayClientMessage(new TextComponent(text), true);
+            player.displayClientMessage(Component.literal(text), true);
         }
-    }*/
+    }
 
     private double getGravity() {
         var gravityFactor = 0.0;
         if (!this.isNoGravity())
             gravityFactor = this.getVelocity() < 0.1 ? 0.2 : -0.1 * Math.log(this.getVelocity()) + 0.03;
-        // displayClientMessage("gravityFactor: " + gravityFactor);
+        if (SkiingConfig.SkiingCommonConfig.SPEED_DEBUG.get()) displayClientMessage("gravityFactor: " + gravityFactor);
         return gravityFactor;
     }
 
     @Override
     public boolean hurt(@NotNull DamageSource source, float amount) {
-        if (this.isInvulnerableTo(source) || level().isClientSide || this.isRemoved()) return false;
+        if (this.isInvulnerableTo(source) || level.isClientSide || this.isRemoved()) return false;
 
         this.setTimeSinceHit(20);
         this.setDamageTaken(this.getDamageTaken() + 10 * amount);
@@ -127,7 +124,7 @@ public abstract class AbstractControllableEntity extends Entity {
         this.gameEvent(GameEvent.ENTITY_DAMAGE, source.getEntity());
         boolean isCreativePlayer = source.getEntity() instanceof Player && ((Player) source.getEntity()).getAbilities().instabuild;
         if (isCreativePlayer || this.getDamageTaken() > this.getMaxHealth()) {
-            if (!isCreativePlayer && this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
+            if (!isCreativePlayer && this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                 this.dropItem();
             }
             this.discard();
@@ -157,6 +154,10 @@ public abstract class AbstractControllableEntity extends Entity {
     @Override
     public boolean canCollideWith(@NotNull Entity entity) {
         return canVehicleCollide(this, entity);
+    }
+
+    private static boolean canVehicleCollide(Entity ridingEntity, Entity entity) {
+        return (entity.canBeCollidedWith() || entity.isPushable()) && !ridingEntity.isPassengerOfSameVehicle(entity);
     }
 
     @Nonnull
@@ -195,7 +196,7 @@ public abstract class AbstractControllableEntity extends Entity {
     @Override
     public @NotNull InteractionResult interact(Player player, @NotNull InteractionHand hand) {
         if (player.isSecondaryUseActive() || player.isShiftKeyDown()) return InteractionResult.PASS;
-        else if (!this.level().isClientSide)
+        else if (!this.level.isClientSide)
             return player.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
         else {
             return InteractionResult.SUCCESS;
@@ -203,7 +204,7 @@ public abstract class AbstractControllableEntity extends Entity {
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -219,7 +220,7 @@ public abstract class AbstractControllableEntity extends Entity {
         if (!this.isPassenger()) {
             if (onGroundIn) {
                 this.fallDistance = 0.0F;
-            } else if (!this.level().getFluidState(this.blockPosition().below()).is(FluidTags.WATER) && y < 0.0D) {
+            } else if (!this.level.getFluidState(this.blockPosition().below()).is(FluidTags.WATER) && y < 0.0D) {
                 this.fallDistance = (float) (this.fallDistance - y);
             }
         }
@@ -338,7 +339,7 @@ public abstract class AbstractControllableEntity extends Entity {
             inputChanged = true;
         }
 
-        if (this.level().isClientSide && inputChanged) {
+        if (this.level.isClientSide && inputChanged) {
             PacketHandler.SKIING_CHANNEL.sendToServer(new ControlVehiclePacket(forward, backward, left, right, player));
         }
     }
@@ -368,7 +369,7 @@ public abstract class AbstractControllableEntity extends Entity {
 
     @Override
     public LivingEntity getControllingPassenger() {
-        return this.getPassengers().isEmpty() ? null : this.getPassengers().get(0).getControllingPassenger();
+        return  this.getFirstPassenger() instanceof LivingEntity livingentity ? livingentity : null;
     }
 
     @Override
